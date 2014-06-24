@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <script src="../../cordova.js"></script>
+        <script src="../../kendo/js/jquery.min.js"></script>
+        <script src="../../kendo/js/kendo.mobile.min.js"></script>
+        <script src="../../scripts/lib/everlive.all.min.js"></script>
+        <script src="../../scripts/app/identity-provider.js"></script>
+        <script src="../../scripts/app/settings.js" type="text/javascript"></script>
+        <script src="../../scripts/app/app.js" type="text/javascript"></script>
+        <script src="../../scripts/app/analytics-monitor.js"></script>
+		<script src="../../scripts/lib/JSBridge.js" type="text/javascript"></script>
+          
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,300,700,800" rel="stylesheet" type="text/css" />
+        <link href="../../kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+        <link href="../../styles/main.css" rel="stylesheet" />
+    </head>
+    <body onload="onBodyLoaded()">
+       <div data-role="layout" data-id="default">
+            <!--View content will render here-->
+        </div>
+        <!--WELCOME VIEW -->
+      <div data-role="view" data-layout="default">
+        <div data-role="header"></div>
+        <form id="login-form">
+        	<ul data-role="listview" data-style="inset">
+            	<li class="username"><input type="text" id="txtFirstName"  required validationMessage="Firstname is required!" /></li>
+            	<li class="username"><input type="password" id="txtLastName"  required validationMessage="Lastname is required!" /></li>
+                <li><input type="email" id="txtEmail"  required validationMessage="Email is required!" /></li>
+        	</ul>
+            <button id="btnSubmit" onclick="addUser()">Add Contact</button>
+        </form>
+        <script>
+    		var accountid = null;
+    		function onBodyLoaded() {
+    			// Request EntityForm object to get currently edited entity
+    			MobileCRM.UI.EntityForm.requestObject(onAccountPropsChanged, onError, null);
+    			// Bind the "onChange" handler to get changes performed on edited entity
+    			MobileCRM.UI.EntityForm.onChange(onAccountPropsChanged, true, null);
+    			// Bind the "onSave" handler to perform additional validation
+    			MobileCRM.UI.EntityForm.onSave(onAccountSave, true, null);
+    		}
+
+    		function onAccountPropsChanged(entityForm) {
+    			// entityForm is an instance of MobileCRM.UI.EntityForm (the account's edit form)
+    			var editedEntity = entityForm.entity; // editedEntity is an instance of MobileCRM.DynamicEntity representing our edited account
+    			accountid = editedEntity.id; // Remember edited account id
+    			var props = editedEntity.properties;
+    			document.getElementById("account-name").innerText = props["name"];
+    			document.getElementById("address-street").innerText = props["address1_line1"];
+    			document.getElementById("address-city").innerText = props["address1_city"];
+    			document.getElementById("phone").innerText = props["telephone1"];
+    		}
+
+    		function onAccountSave(entityForm) {
+    			// entityForm is an instance of MobileCRM.UI.EntityForm (the account's edit form)
+    			var editedEntity = entityForm.entity; // editedEntity is an instance of MobileCRM.DynamicEntity representing our edited account
+    			var props = editedEntity.properties;
+    			if (!(props["telephone1"] && (props["address1_line1"] || props["address1_city"])))
+    				entityForm.context.errorMessage = "Account must have phone number and address";
+    		}
+
+    		function onError(error) {
+    			if (typeof alert != "undefined")	// alert is not defined on Windows RT (Win8 Metro)
+    				alert("An error occured:" + err);
+    		}
+
+    		function addUser() {
+    			var contact = new MobileCRM.DynamicEntity.createNew("contact"),           // create contact entity
+                    lastname = document.getElementById('txtLastName').value,    // get values from HTML form
+                    firstname = document.getElementById('txtFirstName').value,
+                    fullname = firstname + " " + lastname,
+                    email = document.getElementById('txtEmail').value;
+
+    			// create properties for contact entity
+    			contact.properties["fullname"] = fullname;
+    			contact.properties["lastname"] = lastname;
+    			contact.properties["firstname"] = firstname;
+    			contact.properties["emailaddress1"] = email;
+    			contact.properties["parentcustomerid"] = { entityName: "account", id: accountid };  // add lookup field pointing to account
+
+    			// save the entity
+    			contact.save(function (err) {
+    				if (err != null)
+    					alert('Update error ' + err);
+    				else {
+    					alert('New contact ' + fullname + ' was created.');
+    				}
+    			}, null);
+    		}
+		</script>
+      </div> 
+    </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8" />
+        <script src="cordova.js"></script>
+        <script src="kendo/js/jquery.min.js"></script>
+        <script src="kendo/js/kendo.mobile.min.js"></script>
+        <script src="scripts/lib/everlive.all.min.js"></script>
+        <script src="scripts/app/identity-provider.js"></script>
+        <script src="scripts/app/settings.js" type="text/javascript"></script>
+        <script src="scripts/app/app.js" type="text/javascript"></script>
+        <script src="scripts/app/analytics-monitor.js"></script>
+        <script src="scripts/app/users.js" type="text/javascript"></script>
+        <script src="scripts/app/login.js" type="text/javascript"></script>
+        <script src="scripts/app/signup.js" type="text/javascript"></script>
+        <script src="scripts/app/activities.js" type="text/javascript"></script>
+        <script src="scripts/app/activity.js" type="text/javascript"></script>
+        <script src="scripts/app/comments.js" type="text/javascript"></script>
+        <script src="scripts/app/add-activity.js" type="text/javascript"></script>
+        <script src="scripts/app/add-comment.js" type="text/javascript"></script>
+
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,300,700,800" rel="stylesheet" type="text/css" />
+        <link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+        <link href="styles/main.css" rel="stylesheet" />
+    </head>
+    <body>
+    <div id="music" data-role="view" data-title="My Music">
+    <div class="head">&nbsp;</div>
+    <h2>Welcome to Team India Demo App</h2>
+    <ul data-role="listview" data-style="inset" data-type="group">
+        <li>I want to:
+            <ul>
+                <li data-icon="mostviewed"><a href="views/Contacts/addContact.html">Add Contact</a></li>
+                <li data-icon="organize"><a href="views/Contacts/viewContact.html">View Contact</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<style scoped>
+    #music .head {
+    	display: block;
+    	margin: 1em;
+    	height: 110px;
+    	background: url(styles/images/farm.jpg) no-repeat center center;
+        -webkit-background-size: 100% auto;
+        background-size: 100% auto;
+    }
+    .km-ios #music .head {
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+</style>
+        
+<script>
+    var app = new kendo.mobile.Application(document.body);
+</script>
+</body>
+</html>
